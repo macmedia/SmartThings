@@ -3,7 +3,7 @@
  *
  *  Copyright 2016 macmedia
  *
- * 
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at:
  *
@@ -12,7 +12,7 @@
  *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
  *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  *  for the specific language governing permissions and limitations under the License.
- * 
+ *
  */
 metadata {
     definition (name: "Foscam Universal Camera Device", namespace: "macmedia", author: "Mike Elser") {
@@ -24,38 +24,28 @@ metadata {
         capability "Switch"
         capability "Video Camera"
         capability "Video Capture"
-        
+
         attribute "alarmStatus", "string"
         attribute "ledStatus",   "string"
         attribute "hubactionMode", "string"
         attribute "streamType", "string"
-    
+
         command "toggleLED"
         command "rebootDevice"
-        
+
         command "ledOn"
         command "ledOff"
         command "ledAuto"
-        
+
         command "videoStart"
         command "videoStop"
         command "videoSetResHD"
         command "videoSetResSD"
         command "toggleStreamType"
-     
+
     }
     simulator{}
     
-//    preferences {
-//         input("ip", "string", title:"Camera IP Address", description: "Camera IP Address", required: true, displayDuringSetup: true)
-//         input("port", "string", title:"Camera Port", description: "Camera Port", defaultValue: 80 , required: true, displayDuringSetup: true)
-//         input("username", "string", title:"Camera Username", description: "Camera Username", required: true, displayDuringSetup: true)
-//         input("password", "password", title:"Camera Password", description: "Camera Password", required: true, displayDuringSetup: true)
-//         input("hdcamera", "bool", title:"HD Foscam Camera? (9xxx Series)", description: "Type of Foscam Camera", required: true, displayDuringSetup: true)
-//         input("mirror", "bool", title:"Mirror? (Not required for HD cameras)", description: "Camera Mirrored?")
-//         input("flip", "bool", title:"Flip? (Not required for HD cameras)", description: "Camera Flipped?")
-//         input("camDebug", "bool", title:"Camera Debug Mode", description: "Enable to display debugging information in the 'Live Logging' view", required: false, displayDuringSetup: true)
-// }
 
     tiles(scale: 2) {
         //carouselTile("cameraDetails", "device.image", width: 3, height: 2) { }
@@ -89,7 +79,7 @@ metadata {
                 attributeState("betaLogo", label: "", value: "", defaultState: true)
             }
         }
-        
+
         standardTile("take", "device.image", width: 2, height: 2, canChangeIcon: false, canChangeBackground: false) {
             state "take", label: "Take", action: "Image Capture.take", icon: "st.camera.camera", backgroundColor: "#FFFFFF", nextState:"taking"
             state "taking", label:'Taking', action: "", icon: "st.camera.take-photo", backgroundColor: "#53a7c0"
@@ -100,14 +90,14 @@ metadata {
           state "off", label: '${name}', action: "on", icon: "st.camera.dropcam", backgroundColor: "#FFFFFF"
           state "on", label: '${name}', action: "off", icon: "st.camera.dropcam",  backgroundColor: "#53A7C0"
         }
-        
+
         standardTile("ledStatus", "device.ledStatus", width: 2, height: 2, canChangeIcon: false, canChangeBackground: false) {
           state "auto", label: "auto", action: "toggleLED", icon: "st.Lighting.light13", backgroundColor: "#53A7C0"
           state "off", label: "off", action: "toggleLED", icon: "st.Lighting.light13", backgroundColor: "#FFFFFF"
           state "on", label: "on", action: "toggleLED", icon: "st.Lighting.light11", backgroundColor: "#FFFF00"
           state "manual", label: "manual", action: "toggleLED", icon: "st.Lighting.light13", backgroundColor: "#FFFF00"
         }
-        
+
         standardTile("ledAuto", "device.ledStatus", width: 2, height: 2, canChangeIcon: false, canChangeBackground: false) {
           state "auto", label: "auto", action: "ledAuto", icon: "st.Lighting.light11", backgroundColor: "#53A7C0"
           state "off", label: "auto", action: "ledAuto", icon: "st.Lighting.light13", backgroundColor: "#FFFFFF"
@@ -121,27 +111,27 @@ metadata {
           state "on", label: "on", action: "ledOn", icon: "st.Lighting.light11", backgroundColor: "#FFFF00"
           state "manual", label: "on", action: "ledOn", icon: "st.Lighting.light11", backgroundColor: "#00FF00"
         }
-        
+
         standardTile("ledOff", "device.ledStatus", width: 2, height: 2, canChangeIcon: false, canChangeBackground: false) {
           state "auto", label: "off", action: "ledOff", icon: "st.Lighting.light13", backgroundColor: "#FFFFFF"
           state "off", label: "off", action: "ledOff", icon: "st.Lighting.light13", backgroundColor: "#53A7C0"
           state "on", label: "off", action: "ledOff", icon: "st.Lighting.light13", backgroundColor: "#FFFFFF"
           state "manual", label: "off", action: "ledOff", icon: "st.Lighting.light13", backgroundColor: "#00FF00"
         }
-        
+
         standardTile("refresh", "device.refresh", width: 2, height: 2, decoration: "flat") {
           state "refresh", action:"polling.poll", icon:"st.secondary.refresh"
         }
-        
+
         standardTile("reboot", "device.reboot", width: 2, height: 2, canChangeIcon: false, canChangeBackground: false, decoration: "flat"){
             state "reboot", label: '${name}', action: "rebootDevice", icon: "st.samsung.da.RC_ic_power"
         }
 
 
         htmlTile(name:"devInfoHtml", action: "getInfoHtml", width: 6, height: 5)
-        
+
         main (["alarmStatus"])
-        details(["videoPlayer", "take", "reboot", "alarmStatus", "ledAuto", "ledOn", "ledOff", "refresh","devInfoHtml"]) 
+        details(["videoPlayer", "take", "reboot", "alarmStatus", "ledAuto", "ledOn", "ledOff", "refresh","devInfoHtml"])
     }
 }
 
@@ -158,7 +148,7 @@ def configure() {
     doDebug("configure -> Executing")
 
     state.testingState = "initalized"
-    
+
     log.debug("State: $state.testingState")
     sendEvent(name: "switch", value: "on")
 }
@@ -194,7 +184,7 @@ def updated() {
 //    }
 //}
 
-//LIVE VIDEO 
+//LIVE VIDEO
 
 def videoSetProfile(profile) {
     log.info "videoSetProfile -> ${profile}"
@@ -218,10 +208,10 @@ def videoStart(){
     //def useProtocol = parent.cameraStreamProtocol
     def uri = parent.getStreamURI() //useProtocol + userPassAscii + "@${ip}:${usePort}" + "/videoMain"
     def ip  = parent.cameraStreamIP
-    
+
     log.info("CamURI: $uri")
     log.info("CamIP: $ip")
-    
+
     //doDebug("videoStart -> Streaming ${device.currentValue('streamType')} video; apiCommand = ${uri}, IP = ${ip}, Port = ${port}")
 
     //parent.state.CameraStreamPath
@@ -322,7 +312,7 @@ def toggleLED() {
   else if(device.currentValue("ledStatus") == "on") {
     ledOff()
   }
-  
+
   else {
     ledAuto()
   }
@@ -367,7 +357,7 @@ def poll() {
     log.info("Polled for Status")
 
     sendEvent(name: "hubactionMode", value: "local");
-    
+
     //Poll Motion Alarm Status and IR LED Mode
     if(parent.cameraStreamHD == true) {
         delayBetween([hubGet("cmd=getMotionDetectConfig"), hubGet("cmd=getInfraLedConfig")])
@@ -387,24 +377,24 @@ private getLogin() {
     }
 }
 
-private hubGet(def apiCommand) {    
+private hubGet(def apiCommand) {
     //Setting Network Device Id
     log.debug("Started hubGet")
-    
+
     def iphex   = convertIPtoHex(parent.cameraStreamIP)
     def porthex = convertPortToHex(parent.cameraStreamPort)
     def uri     = ""
     def address = getHostAddress()
-    
+
     log.debug("convertIPtoHex: ${iphex}")
     log.debug("convertIPtoHex: ${porthex}")
-    
+
     device.deviceNetworkId = "$iphex:$porthex"
     doDebug("Device Network Id set to ${iphex}:${porthex}")
-    
+
     doDebug("Executing hubaction on " + address)
-    
-    
+
+
     if(parent.cameraStreamHD == true) {
         uri = "/cgi-bin/CGIProxy.fcgi?" + getLogin() + apiCommand
     }
@@ -412,7 +402,7 @@ private hubGet(def apiCommand) {
         uri = apiCommand + getLogin()
     }
     doDebug("Command URL: ${address}${uri}")
-    
+
     def hubAction = new physicalgraph.device.HubAction(
         method: "GET",
         path: uri,
@@ -423,21 +413,21 @@ private hubGet(def apiCommand) {
         sendEvent(name: "hubactionMode", value: "local");
     }
     return hubAction
-    
+
 }
 
 //Parse events into attributes
 
 def parse(String description) {
     log.debug(">>> Parsing '${description}'")
-    
+
     //Need to check on this. The child app calls this and causes array index errors when called from updated
     if(description == "updated") return
-    
+
     def map = [:]
     def retResult = []
     def descMap = parseDescriptionAsMap(description)
-        
+
     //Image
     if (descMap["bucket"] && descMap["key"]) {
         putImageInS3(descMap)
@@ -490,13 +480,13 @@ def parseDescriptionAsMap(description) {
     log.debug("Device -> Map")
     description.split(",").inject([:]) { map, param ->
         def nameAndValue = param.split(":")
-        
+
         try{
             map += [(nameAndValue[0].trim()):nameAndValue[1].trim()]
         } catch (e){
             log.error("Error thrown in parseDescriptionAsMap : $e")
         }
-        
+
     }
 }
 
@@ -534,7 +524,7 @@ private getHostAddress() {
     return "${parent.cameraStreamIP}:${parent.cameraStreamPort}"
 }
 
-private String convertIPtoHex(ipAddress) { 
+private String convertIPtoHex(ipAddress) {
     log.debug("Device -> convert ip to hex")
     String hex = ipAddress.tokenize( '.' ).collect {  String.format( '%02x', it.toInteger() ) }.join()
     return hex.toUpperCase()
@@ -630,8 +620,8 @@ private doDebug(Object... dbgStr) {
 
 
 //*********************************** HTML TILE **********************************
-def getInfoHtml() { 
-    
+def getInfoHtml() {
+
     //Create defaults
     def _debug_mode = "N/A"
     def _ip_address = "N/A"
@@ -640,22 +630,22 @@ def getInfoHtml() {
     def _camera_hd  = "N/A"
     def _ip_stream_port = "N/A"
     def _stream_uri = "N/A"
-    
-    //Setup variables 
+
+    //Setup variables
     if (parent?.cameraStreamDebug)      _debug_mode = "TRUE"
     if (parent?.cameraStreamIP)         _ip_address = parent.cameraStreamIP.toString()
     if (parent?.cameraStreamPort)       _ip_port    = parent.cameraStreamPort.toString()
     if (parent?.cameraStreamProtocol)   _ip_stream  = parent.cameraStreamProtocol.toString().toUpperCase()
     if (parent?.cameraStreamRTSPPort)   _ip_stream_port = parent.cameraStreamRTSPPort.toString()
     if (parent?.cameraStreamHD)         _camera_hd  = parent.cameraStreamHD.toString().toUpperCase()
-    
+
     //Build Stream URI to display
     _stream_uri =   parent?.cameraStreamProtocol +
                     parent?.cameraStreamUser + ":*****@" +
-                    parent?.cameraStreamIP + ":" + 
+                    parent?.cameraStreamIP + ":" +
                     parent?.cameraStreamRTSPPort +"/videoMain"
 
-    
+
     //Create the html to show in html tile
     renderHTML {
         head {
@@ -675,7 +665,7 @@ def getInfoHtml() {
               box-shadow: inset 0 0px rgba(0, 0, 0, 0.25), inset 0 0px rgba(0, 0, 0, 0.25);
               padding: 4px;
             }
-            
+
             .flat-table th {
               -webkit-font-smoothing: antialiased;
               color: #f5f5f5;
