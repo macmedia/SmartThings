@@ -17,6 +17,7 @@ definition(
     name: "Foscam Universal Camera child",
     namespace: "macmedia",
     author: "Mike Elser",
+    parent: "Foscam Universal Camera (Connect)",
     description: "Foscam Universal Camera App to control the camera and view live video",
     category: "Safety & Security",
     iconUrl: "https://s3-us-west-2.amazonaws.com/smartthings-icons/foscam-icon.png",
